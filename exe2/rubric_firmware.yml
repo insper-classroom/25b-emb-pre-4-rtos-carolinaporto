@@ -6,6 +6,3 @@ forbiten:
     - busy_wait_us
     - tight_loop_contents
     error_text: Você não deve utilizar nenhuma funcão de sleep ou delay. Use o timer.
-  - names:
-    - gpio_get
-    error_text: Você não deve fazer pooling no pino, deve utilizar interrupcão para ler os pinos.
