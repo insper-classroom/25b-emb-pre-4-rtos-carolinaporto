@@ -1,9 +1,3 @@
-**
- * Copyright (c) 2020 Raspberry Pi (Trading) Ltd.
- *
- * SPDX-License-Identifier: BSD-3-Clause
- */
-
 #include <FreeRTOS.h>
 #include <task.h>
 #include <semphr.h>
@@ -98,7 +92,7 @@ int main() {
     xSemaphoreLedY = xSemaphoreCreateBinary();
 
     gpio_set_irq_enabled_with_callback(BTN_PIN_R, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
-    gpio_set_irq_enabled(BTN_PIN_Y, GPIO_IRQ_EDGE_FALL, true, &btn_callback);
+    gpio_set_irq_enabled(BTN_PIN_Y, GPIO_IRQ_EDGE_FALL, true);
 
     xTaskCreate(led_1_task, "LED_Task 1", 256, NULL, 1, NULL);
     xTaskCreate(led_2_task, "LED_Task 2", 256, NULL, 1, NULL);
