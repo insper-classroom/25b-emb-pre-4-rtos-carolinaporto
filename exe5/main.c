@@ -30,7 +30,9 @@ static void btn_callback(uint gpio, uint32_t events) {
 }
 
 static void led_r_task(void *p) {
-    gpio_init(LED_PIN_R); gpio_set_dir(LED_PIN_R, GPIO_OUT);
+    gpio_init(LED_PIN_R);
+    gpio_set_dir(LED_PIN_R, GPIO_OUT);
+
     bool blinking = false;
     bool level = false;
 
@@ -41,13 +43,13 @@ static void led_r_task(void *p) {
             level = false;
             gpio_put(LED_PIN_R, 0);
         } else {
-            level = !level;
-            gpio_put(LED_PIN_R, level);
-            if (xSemaphoreTake(xSemaphoreLedR, 0) == pdTRUE) {
+            if (xSemaphoreTake(xSemaphoreLedR, pdMS_TO_TICKS(100)) == pdTRUE) {
                 blinking = false;
-                gpio_put(LED_PIN_R, 0);
+                gpio_put(LED_PIN_R, 0); 
+            } else {
+                level = !level;
+                gpio_put(LED_PIN_R, level);
             }
-            vTaskDelay(pdMS_TO_TICKS(100));
         }
     }
 }
@@ -55,6 +57,7 @@ static void led_r_task(void *p) {
 static void led_y_task(void *p) {
     gpio_init(LED_PIN_Y);
     gpio_set_dir(LED_PIN_Y, GPIO_OUT);
+
     bool blinking = false;
     bool level = false;
 
@@ -65,16 +68,17 @@ static void led_y_task(void *p) {
             level = false;
             gpio_put(LED_PIN_Y, 0);
         } else {
-            level = !level;
-            gpio_put(LED_PIN_Y, level);
-            if (xSemaphoreTake(xSemaphoreLedY, 0) == pdTRUE) {
+            if (xSemaphoreTake(xSemaphoreLedY, pdMS_TO_TICKS(100)) == pdTRUE) {
                 blinking = false;
                 gpio_put(LED_PIN_Y, 0);
+            } else {
+                level = !level;
+                gpio_put(LED_PIN_Y, level);
             }
-            vTaskDelay(pdMS_TO_TICKS(100));
         }
     }
 }
+
 
 static void btn_task(void *p) {
     gpio_init(BTN_PIN_R); gpio_set_dir(BTN_PIN_R, GPIO_IN); gpio_pull_up(BTN_PIN_R);
